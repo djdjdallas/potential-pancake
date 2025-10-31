@@ -34,7 +34,11 @@
   "functions": {
     "app/api/**/*.js": {
       "memory": 1024,
-      "maxDuration": 30
+      "maxDuration": 60
+    },
+    "app/api/gmail/scan/*.js": {
+      "memory": 1024,
+      "maxDuration": 60
     }
   }
 }
