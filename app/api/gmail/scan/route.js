@@ -87,17 +87,21 @@ export async function POST(request) {
     }
 
     // Save scan results to database
-    const { error: scanError } = await supabase
+    const { data: scanRecord, error: scanError } = await supabase
       .from('email_scans')
       .insert({
         user_id: user.id,
         emails_scanned: scanResults.emailsScanned,
         opportunities_found: scanResults.opportunitiesFound.length,
         status: 'completed'
-      });
+      })
+      .select()
+      .single();
 
     if (scanError) {
       logError('Error saving scan results', scanError, { userId: user.id });
+    } else {
+      logInfo('Scan record saved to database', { scanId: scanRecord?.id });
     }
 
     // Save found opportunities to money_found table
@@ -143,7 +147,9 @@ export async function POST(request) {
       emailsScanned: scanResults.emailsScanned,
       opportunitiesFound: scanResults.opportunitiesFound.length,
       opportunities: scanResults.opportunitiesFound,
-      message: scanResults.message
+      message: scanResults.message,
+      // Include email subjects for debugging/verification
+      emailSubjects: scanResults.emailSubjects || []
     });
 
   } catch (error) {
