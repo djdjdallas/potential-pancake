@@ -145,6 +145,7 @@ export async function POST(request) {
     return NextResponse.json({
       success: true,
       emailsScanned: scanResults.emailsScanned,
+      totalEmailsFound: scanResults.totalEmailsFound || scanResults.emailsScanned,
       opportunitiesFound: scanResults.opportunitiesFound.length,
       opportunities: scanResults.opportunitiesFound,
       message: scanResults.message,
